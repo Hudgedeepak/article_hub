@@ -3,54 +3,83 @@ package com.example.article_hub.entity;
 import java.io.Serializable;
 import java.sql.Date;
 
-import org.hibernate.annotations.ManyToAny;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity(name="article")
-@Table(name="article")
+@NamedQuery(name = "Article.getAllArticle", query = "select new com.example.article_hub.entity.Article(id, title, content, status, publication_date, category.id, category.name) from article where(:status is null or status=:status )")
+
+@NamedQuery(name = "Article.updateArticle", query = "update article a SET a.title=:title, a.content=:content, a.category.id=:categoryId, a.publication_date=:publication_date, a.status=:status where a.id=:id")
+
+@NamedQuery(name = "Article.deleteArticle", query = "delete from article where id=:id")
+
+
+
+
+@Entity(name = "article")
+@Table(name = "article")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Article implements Serializable {
 
-	private static final long  serialVersionUID= 1L;
-		
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	
+
 	private String title;
-	
+
 	@Lob
 	private String content;
-	
-	@ManyToAny
-	@JoinTable(name="category_id")
+
+	@ManyToOne
+	@JoinColumn(name = "category_id")
 	private Category category;
-	
+
 	private Date publication_date;
-	
+
 	private String status;
-	
-	
+
 //	----------------
-	
+
 	@Transient
-	private String categoryId;
-	
+	private Integer categoryId;
+
 	@Transient
 	private String categoryName;
 
+	
+	
+	public Article() {
+		super();
+	}
+
+	public Article(Integer id, String title, String content, String status, Date publication_date, Integer categoryId,String categoryName) {
+		this.id = id;
+		this.title = title;
+		this.content = content;
+		this.publication_date = publication_date;
+		this.status = status;
+		this.categoryId = categoryId;
+		this.categoryName = categoryName;
+	}
+	
+	
+	
+	
 	public Integer getId() {
 		return id;
 	}
@@ -99,11 +128,11 @@ public class Article implements Serializable {
 		this.status = status;
 	}
 
-	public String getCategoryId() {
+	public Integer getCategoryId() {
 		return categoryId;
 	}
 
-	public void setCategoryId(String categoryId) {
+	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
 	}
 
@@ -118,37 +147,23 @@ public class Article implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
-	public Article() {
-		super();
-	}
 
-	public Article(Integer id, String title, String content,String status, Date publication_date,  String categoryId) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.content = content;
-		this.publication_date = publication_date;
-		this.status = status;
-		this.categoryId = categoryId;
-	}
-	
-	
-	private String CheckForNullValues() {
-		if(title==null) {
-			return "title";
+
+
+		public String checkForNullValues() {
+			if (title == null) {
+				return "title";
+			}
+			if (content == null) {
+				return "content";
+			}
+			if (categoryId == null) {
+				return "categoryId";
+			}
+			if (status == null) {
+				return "status";
+			}
+			return null;
 		}
-		if(content==null) {
-			return "content";
-		}
-		if(categoryId==null) {
-			return "categoryId";
-		}
-		if(status==null) {
-			return "status";
-		}
-		return null;
-	}
-	
+
 }
