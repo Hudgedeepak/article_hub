@@ -2,8 +2,6 @@ package com.example.article_hub.entity;
 
 import java.io.Serializable;
 
-import jakarta.annotation.Generated;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,6 +38,10 @@ public class Category implements Serializable {
 		super();
 		this.id = id;
 		this.name = name;
+	}
+
+	public Category(Integer categoryId) {
+		this.id = categoryId;
 	}
 
 	public Integer getId() {
