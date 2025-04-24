@@ -9,6 +9,9 @@ import com.example.article_hub.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
+	Boolean existsByNameIgnoreCase(String name);
 	
-	
+	@Modifying
+	@Transactional
+	Integer updateCategory(@Param("name") String name, @Param("id") Integer id );
 }
