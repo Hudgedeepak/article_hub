@@ -32,13 +32,11 @@ public class SecurityConfig {
         return new UserInfoService();
     }
 
-    // ✅ Define JwtAuthFilter as a Bean
     @Bean
     public JwtAuthFilter jwtAuthFilter(UserDetailsService userDetailsService) {
         return new JwtAuthFilter(userDetailsService);
     }
 
-    // ✅ Inject JwtAuthFilter via method parameter
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
