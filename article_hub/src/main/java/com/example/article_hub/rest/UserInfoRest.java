@@ -32,5 +32,4 @@ public interface UserInfoRest {
 	@PostMapping("/updateUser")
 	ResponseEntity<?> updateUser(@RequestBody(required = true) UserInfo userInfo);
 	
-	
 }
