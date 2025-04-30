@@ -1,0 +1,29 @@
+<mat-toolbar class="mat-elevation-z8" [color]="themeService.getTheme()">
+    Article Hub
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>palette</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+        <button mat-fab color="primary" class="button-margin" (click)="changeTheme('primary')">
+            <mat-icon *ngIf="themeService.getTheme() === 'primary'">done</mat-icon>
+        </button>
+        <button mat-fab color="accent" class="button-margin" (click)="changeTheme('accent')">
+            <mat-icon *ngIf="themeService.getTheme() === 'accent'">done</mat-icon>
+        </button>
+        <button mat-fab color="warn" class="button-margin" (click)="changeTheme('warn')">
+            <mat-icon *ngIf="themeService.getTheme() === 'warn'">done</mat-icon>
+        </button>
+    </mat-menu>
+
+    <button mat-icon-button [routerLink]="['/login']">
+        <mat-icon>login</mat-icon>
+    </button>
+</mat-toolbar>
+
+
+<mat-toolbar [color]="themeService.getTheme()" class="footer">
+    <div class="toolbar-content">All rights reserved &#64; BTech Days</div>
+  </mat-toolbar>
+  
