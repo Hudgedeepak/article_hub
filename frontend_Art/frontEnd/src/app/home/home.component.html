@@ -1,6 +1,10 @@
 <mat-toolbar class="mat-elevation-z8" [color]="themeService.getTheme()">
     Article Hub
     <span class="spacer"></span>
+   <button mat-icon-button [routerLink]="['/register']" matTooltip="Register">
+    <mat-icon>person_add</mat-icon>
+  </button>
+
     <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>palette</mat-icon>
     </button>
@@ -22,8 +26,28 @@
     </button>
 </mat-toolbar>
 
+<div class="content-wrapper">
+    <br>
+    <mat-form-field appearance="fill" [color]="themeService.getTheme()">
+        <mat-label>Filter</mat-label>
+        <input matInput [(ngModel)]="searchText" (input)="filteredItems()">
+    </mat-form-field>
+
+    <div class="card-container">
+        <mat-card *ngFor="let card of filteredItems()" class="card" (click)="handleViewAction(card)">
+            <mat-card-header>
+                <mat-card-title>{{card.title}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                Category: {{card.categoryName}}
+                <br>
+                Published on {{card.publication_date | date:'dd-MM-yyyy'}}
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <h1 *ngIf="filteredItems()?.length == 0">Nothing to show!</h1>
+</div>
 
 <mat-toolbar [color]="themeService.getTheme()" class="footer">
     <div class="toolbar-content">All rights reserved &#64; BTech Days</div>
-  </mat-toolbar>
-  
+</mat-toolbar>

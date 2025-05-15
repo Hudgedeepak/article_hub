@@ -9,9 +9,9 @@
                 <mat-form-field appearance="outline" fxFlex [color]="themeService.getTheme()">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" required>
-                    <mat-error *ngIf="loginForm.controls.email.touched && loginForm.controls.email.invalid">
-                        <span *ngIf="loginForm.controls.email.errors.required">This field is required.</span>
-                        <span *ngIf="loginForm.controls.email.errors.pattern">This field is invalid.</span>
+                    <mat-error *ngIf ="loginForm.controls.email.touched && loginForm.controls.email.invalid">
+                        <span *ngIf ="loginForm.controls.email.errors.required">This field is required.</span>
+                        <span *ngIf ="loginForm.controls.email.errors.pattern">This field is invalid.</span>
                     </mat-error>
                 </mat-form-field>
 
