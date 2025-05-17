@@ -5,12 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.article_hub.entity.AuthRequest;
 import com.example.article_hub.entity.UserInfo;
 import com.example.article_hub.rest.UserInfoRest;
 import com.example.article_hub.service.UserInfoService;
+@CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
 public class UserInfoRestImpl implements UserInfoRest {
@@ -81,5 +83,16 @@ public class UserInfoRestImpl implements UserInfoRest {
 	
 		
 	}
+	
+	@Override
+	public ResponseEntity<?> deleteUser(Integer id) {
+	    try {
+	        return userInfoService.deleteUser(id);
+	    } catch (Exception ex) {
+	        log.error("Exception in deleteUser : {}", ex.getMessage());
+	    }
+	    return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	
 }
