@@ -19,5 +19,8 @@ public interface UserInfoService {
 	ResponseEntity<?> checkToken();
 
 	ResponseEntity<?> updateUser(UserInfo userInfo);
+	
+	ResponseEntity<?> deleteUser(Integer id);
+
 
 }

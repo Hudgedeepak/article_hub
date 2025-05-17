@@ -1,7 +1,10 @@
 package com.example.article_hub.rest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.article_hub.entity.AuthRequest;
 import com.example.article_hub.entity.UserInfo;
+
 
 @RequestMapping(path="/appUser")
 public interface UserInfoRest {
@@ -31,5 +35,10 @@ public interface UserInfoRest {
 	
 	@PostMapping("/updateUser")
 	ResponseEntity<?> updateUser(@RequestBody(required = true) UserInfo userInfo);
+	
+	@CrossOrigin(origins = "http://localhost:4200/appUser}")
+	@DeleteMapping("/deleteUser/{id}")
+	ResponseEntity<?> deleteUser(@PathVariable Integer id);
+
 	
 }

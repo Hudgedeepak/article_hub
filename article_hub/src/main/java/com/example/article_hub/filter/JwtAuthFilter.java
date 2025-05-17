@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private final List<String> allowedEndPoints = Arrays.asList("/appUser/addNewAppuser", "/appUser/login",
-			"/article/getAllPublishedArticle", "/appuser/addNewAppuser", "/appuser/login");
+			"/article/getAllPublishedArticle", "/appuser/addNewAppuser", "/appuser/login","/appUser/deleteUser/{id}");
 
 	@Autowired
 	private JwtService jwtservice;
@@ -32,7 +32,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	private String email = null;
+	private static final ThreadLocal<String> currentEmail = new ThreadLocal<>();
+
 
 	public JwtAuthFilter(UserDetailsService userDetailsService2) {
 		this.userDetailsService = userDetailsService;
@@ -52,9 +53,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
-			email = jwtservice.extractUsername(token);
+	        currentEmail.set(jwtservice.extractUsername(token));
 		}
-
+		String email = currentEmail.get();
 		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 			if (jwtservice.validateToken(token, userDetails)) {
@@ -65,10 +66,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			}
 		}
 
-		filterChain.doFilter(request, response);
+		 try {
+		        filterChain.doFilter(request, response);
+		    } finally {
+		        currentEmail.remove();
+		    }
 	}
 
 	public String getEmail() {
-		return email;
+		 return currentEmail.get();
 	}
 }

@@ -62,7 +62,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			userInfo.setStatus("true");
 			userInfo.setEmail(userInfo.getEmail().toLowerCase());
 			userInfoRepository.save(userInfo);
-			return new ResponseEntity<>("{\"message\":\"Sign successful.\"}", HttpStatus.OK);
+			return new ResponseEntity<>("{\"message\":\"User Added successfully.\"}", HttpStatus.OK);
 		} catch (Exception ex) {
 			log.error("Exception in addNewUser : {}", ex);
 		}
@@ -127,7 +127,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 				if (updateCount == 0) {
 					return new ResponseEntity<>("{\"message\":\"User id does not exit\"}", HttpStatus.BAD_REQUEST);
 				} else {
-					return new ResponseEntity<>("{\"message\":\"User updated Successfully\"}", HttpStatus.OK);
+					return new ResponseEntity<>("{\"message\":\"\"}", HttpStatus.OK);
 				}
 			} 
 			
@@ -172,5 +172,36 @@ public class UserInfoServiceImpl implements UserInfoService {
 		return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	
 	}
+	
+	
+	@Override
+	public ResponseEntity<?> deleteUser(Integer id) {
+	    try {
+	        String requesterEmail = jwtAuthFilter.getEmail();
+	        Optional<UserInfo> requesterOpt = userInfoRepository.findByEmail(requesterEmail);
+
+	        if (requesterOpt.isEmpty() || !"admin@gmail.com".equalsIgnoreCase(requesterOpt.get().getEmail())) {
+	            return new ResponseEntity<>("{\"message\":\"Only admin can delete users.\"}", HttpStatus.FORBIDDEN);
+	        }
+
+	        Optional<UserInfo> userToDelete = userInfoRepository.findById(id);
+	        if (userToDelete.isEmpty()) {
+	            return new ResponseEntity<>("{\"message\":\"User not found.\"}", HttpStatus.NOT_FOUND);
+	        }
+
+	        UserInfo user = userToDelete.get();
+	        if ("false".equals(user.getIsDeletable())) {
+	            return new ResponseEntity<>("{\"message\":\"This user cannot be deleted.\"}", HttpStatus.BAD_REQUEST);
+	        }
+
+	        userInfoRepository.delete(user);
+	        return new ResponseEntity<>("{\"message\":\"User deleted successfully.\"}", HttpStatus.OK);
+
+	    } catch (Exception ex) {
+	        log.error("Exception in deleteUser : {}", ex.getMessage());
+	    }
+	    return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 
 }

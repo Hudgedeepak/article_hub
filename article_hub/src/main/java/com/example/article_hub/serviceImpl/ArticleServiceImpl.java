@@ -1,6 +1,6 @@
 package com.example.article_hub.serviceImpl;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Objects;
 
 import org.slf4j.Logger;
@@ -31,8 +31,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 				String errorKeyValue = article.checkForNullValues();
 				if (Objects.isNull(errorKeyValue)) {
-					article.setPublication_date(new Date(0));
-					article.setCategory(new Category(article.getCategoryId()));
+					article.setPublication_date(new java.sql.Date(System.currentTimeMillis()));					article.setCategory(new Category(article.getCategoryId()));
 					articleRepository.save(article);
 					return new ResponseEntity<>("{\"message\":\"article added successfully\"}", HttpStatus.OK);
 				} else {
